@@ -42,7 +42,6 @@
 
   rules:
     - RULE-SET,ads,REJECT
-
     - RULE-SET,private,🟢 直连
     - RULE-SET,privateip,🟢 直连
     - RULE-SET,applications,🟢 直连
