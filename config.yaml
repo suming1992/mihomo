@@ -1,0 +1,102 @@
+  proxies:
+  - name: "🟢 直连"
+    type: direct
+    udp: true
+   
+  # 锚点
+  pr: &pr {type: select, proxies: [🟢 直连, 🚀 节点选择, 🚀 手动切换, ♻️ 自动选择, 🇭🇰 香港节点, 🇨🇳 台湾节点, 🇸🇬 狮城节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇺🇳 其他节点]}
+  # 策略组
+  proxy-groups:
+    - {name: 🚀 节点选择, type: select, proxies: [🟢 直连, 🚀 手动切换, ♻️ 自动选择, 🇭🇰 香港节点, 🇨🇳 台湾节点, 🇸🇬 狮城节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇺🇳 其他节点]}
+    - {name: 🚀 手动切换, type: select, include-all: true}
+    - {name: ♻️ 自动选择, type: url-test, include-all: true}
+    - {name: 📈 网络测试, type: select, proxies: [🟢 直连, 🚀 手动切换]}
+    - {name: 🤖 人工智能,!!merge <<: *pr}
+    - {name: 🎮 游戏服务,!!merge <<: *pr}
+    - {name: 📲 电报消息,!!merge <<: *pr}
+    - {name: 📹 油管视频,!!merge <<: *pr}
+    - {name: 🎥 奈飞视频, type: select, include-all: true, filter: "(?i)HK|TW|SG|原生"}
+    - {name: 📽️ 迪士尼,!!merge <<: *pr}
+    - {name: 📺 哔哩哔哩,!!merge <<: *pr}
+    - {name: 📺 Bigolive,!!merge <<: *pr}
+    - {name: 🎞️ Max,!!merge <<: *pr}
+    - {name: 🎬 Prime Video,!!merge <<: *pr}
+    - {name: 🎥 奈飞视频, type: select, include-all: true, filter: "(?i)TW|台湾"}
+    - {name: 📞 Talkatone, type: select, include-all: true, filter: "(?i)US|美国"}
+    - {name: 🍎 Apple TV,!!merge <<: *pr}
+    - {name: 🍎 苹果服务,!!merge <<: *pr}
+    - {name: 🪟 微软服务,!!merge <<: *pr}
+    - {name: 🇬 谷歌服务,!!merge <<: *pr}
+    - {name: 🇨🇳 直连域名,!!merge <<: *pr}
+    - {name: 🇨🇳 直连 IP,!!merge <<: *pr}
+    - {name: 🧱 代理域名, proxies: [🚀 节点选择, 🚀 手动切换, ♻️ 自动选择]}
+    - {name: 🎯 全球直连, type: select, proxies: [🟢 直连, 🚀 节点选择]}
+    - {name: 🐟 漏网之鱼,!!merge <<: *pr}
+    - {name: 🇭🇰 香港节点, type: url-test, include-all: true, tolerance: 20, interval: 180, filter: "(?i)港|hk|hongkong|hong kong"}
+    - {name: 🇭🇰 香港节点, type: url-test, include-all: true, tolerance: 20, interval: 180, filter: "(?i)TW|台湾"}
+    - {name: 🇸🇬 狮城节点, type: url-test, include-all: true, tolerance: 20, interval: 180, filter: "(?i)SG|新加坡"}
+    - {name: 🇺🇸 美国节点, type: url-test, include-all: true, tolerance: 20, interval: 180, filter: "(?i)US|美国"}
+    - {name: 🇯🇵 日本节点, type: url-test, include-all: true, tolerance: 20, interval: 180, filter: "(?i)JP|日本"}
+    - {name: 🇰🇷 韩国节点, type: url-test, include-all: true, tolerance: 20, interval: 180, filter: "(?i)KR|韩国"}
+    - {name: 🇺🇳 其他节点, type: url-test, include-all: true, tolerance: 20, interval: 180, filter: "^((?!(HK|香港|TW|台湾|SG|新加坡|US|美国|JP|日本|KR|韩国)).)*$"}
+
+  rules:
+    - RULE-SET,ads,REJECT
+
+    - RULE-SET,private,🟢 直连
+    - RULE-SET,privateip,🟢 直连
+    - RULE-SET,applications,🟢 直连
+    - RULE-SET,networktest,📈 网络测试
+    - RULE-SET,ai,🤖 人工智能
+    - RULE-SET,games-cn,🎮 游戏服务
+    - RULE-SET,telegramip,📲 电报消息,no-resolve
+    - RULE-SET,youtube,📹 油管视频
+    - RULE-SET,netflix,🎥 奈飞视频
+    - RULE-SET,netflixip,🎥 奈飞视频,no-resolve
+    - RULE-SET,disney,📽️ 迪士尼
+    - RULE-SET,bilibili,📺 哔哩哔哩
+    - RULE-SET,max,🎞️ Max
+    - RULE-SET,primevideo,🎬 Prime Video
+    - RULE-SET,tiktok,🎵 Tiktok
+    - RULE-SET,appletv,🍎 Apple TV
+    - RULE-SET,apple-cn,🍎 苹果服务
+    - RULE-SET,microsoft-cn,🪟 微软服务
+    - RULE-SET,google-cn,🇬 谷歌服务
+    - RULE-SET,proxy,🧱 代理域名
+    - RULE-SET,tld-proxy,🧱 代理域名
+    - RULE-SET,cn,🇨🇳 直连域名
+    - RULE-SET,tld-cn,🇨🇳 直连域名
+    - RULE-SET,cnip,🇨🇳 直连 IP,no-resolve
+    - MATCH,🐟 漏网之鱼
+
+  rule-anchor:
+    ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: mrs}
+    domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
+    class: &class {type: http, interval: 86400, behavior: classical, format: text}
+  rule-providers: 
+    ads: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/ads.mrs"}
+    ai: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/ai.mrs"}
+    apple-cn: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/apple-cn.mrs"}
+    apple-tv: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/appletv.mrs"}
+    applications: {!!merge <<: *class, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/applications.list"}
+    bilibili: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/bilibili.mrs"}
+    cn: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/cn.mrs"}
+    cnip: {!!merge <<: *ip, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/cnip.mrs"}
+    disney: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/disney.mrs"}
+    fakeip-filter: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/fakeip-filter.mrs"}
+    game-cn: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/games-cn.mrs"}
+    google-cn: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/google-cn.mrs"}
+    max: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/max.mrs"}
+    microsoft-cn: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/microsoft-cn.mrs"}
+    netflix: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/netflix.mrs"}
+    netflixip: {!!merge <<: *ip, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/netflixip.mrs"}
+    networktest: {!!merge <<: *class, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/networktest.list"}
+    primevideo: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/primevideo.mrs"}
+    private: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/private.mrs"}
+    privateip: {!!merge <<: *ip, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/privateip.mrs"}
+    proxy: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/proxy.mrs"}
+    telegramip: {!!merge <<: *ip, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/telegramip.mrs"}
+    tiktok: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/tiktok.mrs"}
+    tld-cn: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/tld-cn.mrs"}
+    tld-proxy: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/tld-proxy.mrs"}
+    youtube: {!!merge <<: *domain, url: "https://github.nascloud.us.kg/https://github.com/DustinWin/ruleset_geodata/blob/mihomo-ruleset/youtube.mrs"}
